@@ -10,7 +10,6 @@ public class DynamicdatasourceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DynamicdatasourceApplication.class, args);
-        System.out.println("启动");
     }
 
 }
