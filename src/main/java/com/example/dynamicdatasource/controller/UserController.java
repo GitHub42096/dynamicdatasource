@@ -23,6 +23,7 @@ public class UserController {
     @ResponseBody
     public String save(UserDO user) {
         // 切换数据源，之后的请求会去连接池中取数据库连接，连接池不与线程绑定
+        // 切换数据源要在事务之前就可以了。否则不生效。
         DataSourceContextHolder.setDB("test");
         userService.add(user);
         return "ok";
