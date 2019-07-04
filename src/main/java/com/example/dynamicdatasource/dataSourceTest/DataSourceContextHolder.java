@@ -1,8 +1,6 @@
 package com.example.dynamicdatasource.dataSourceTest;
 
-/**
- * Created by meridian on 2018/9/25.
- */
+
 public class DataSourceContextHolder {
     private static ThreadLocal<String> contextHolder = new ThreadLocal<String>();
 

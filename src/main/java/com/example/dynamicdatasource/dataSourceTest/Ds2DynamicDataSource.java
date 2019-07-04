@@ -1,7 +1,6 @@
 package com.example.dynamicdatasource.dataSourceTest;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -19,13 +18,9 @@ public class Ds2DynamicDataSource extends AbstractRoutingDataSource {
     private static Ds2DynamicDataSource instance;
     private static byte[] lock = new byte[0];
     private static Map<Object, Object> dataSourceMap = new HashMap<Object, Object>();
-    @Autowired
-    DruidDataSourceProperty druidDataSourceProperty;
 
-
-    public Ds2DynamicDataSource() {
-        Map<Object,Object> dataSourceMap=new HashMap<Object, Object>();
-
+    // 数据源配置
+    {
         DruidDataSource wdataSource = new DruidDataSource();
         wdataSource.setDriverClassName("com.mysql.jdbc.Driver");
         wdataSource.setUrl("jdbc:mysql://127.0.0.1:3306/miaosha?useUnicode=true&characterEncoding=utf8");
@@ -45,9 +40,12 @@ public class Ds2DynamicDataSource extends AbstractRoutingDataSource {
         wdataSource1.setMinIdle(5);
         wdataSource1.setInitialSize(5);
         dataSourceMap.put("test", wdataSource1);
+    }
 
+    public Ds2DynamicDataSource() {
         this.setTargetDataSources(dataSourceMap);
     }
+
 
     public static synchronized Ds2DynamicDataSource getInstance() {
         if (instance == null) {
@@ -67,17 +65,9 @@ public class Ds2DynamicDataSource extends AbstractRoutingDataSource {
         super.afterPropertiesSet();// 必须添加该句，否则新添加数据源无法识别到
     }
 
-    public Map<Object, Object> getDataSourceMap() {
-        return dataSourceMap;
-    }
-
     @Override
     protected Object determineCurrentLookupKey() {
         String dbKey = DataSourceContextHolder.getDB();
-		/*if (StringUtils.isBlank(dbKey)) {
-			dbKey = "read";
-		}*/
         return dbKey;
     }
-
 }
